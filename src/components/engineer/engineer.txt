@@ -1,0 +1,14 @@
+
+
+https://localhost:44331/api/EngineerResolvedTicketsAll : Pass EngineeredId through Parameter
+
+ https://localhost:44331/api/EngineerApprovedTicketsAll : Pass EngineeredId through Parameter
+
+
+ https://localhost:44331/api/EngineerAssignedTicketsAll : Pass EngineeredId through Parameter
+
+
+https://localhost:44331/api/TicketReportWithAssignmentHistory  : Pass From date and To date Status and 
+
+https://localhost:44331/api/ForwardedTicketsByEngineer  : Pass EngineeredId through Parameter
+
