@@ -43,7 +43,7 @@ import UserHead from "./components/user/UserHead";
 import EngineerHead from "./components/engineer/EngineerHead";
 import UserRejectedTicket from "./components/user/UserRejectedTicket";
 import OperatorRejectedTickets from "./components/operator/OperatorRejectedTickets";
-
+import EngineerGenerateTicket from "./components/engineer/EngineerGenerateTicket";
 
 function App() {
  
@@ -98,6 +98,11 @@ function App() {
           <Route
             path="EngineerForwardTickets"
             element={<EngineerForwardTickets />}
+          />
+        {/* </Route> */}
+          <Route
+            path="EngineerGenerateTicket"
+            element={<EngineerGenerateTicket />}
           />
         </Route>
 

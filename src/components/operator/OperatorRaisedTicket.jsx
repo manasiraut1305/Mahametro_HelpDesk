@@ -175,7 +175,7 @@ const OperatorRaisedTicket = () => {
     setFilteredEngineers(engineers); // Use full engineer list
   };
 
-  // Handler for closing the ticket detail modal
+  
   const handleClose = () => {
     setShow(false);
     setSelectedTicket(null);
@@ -302,6 +302,18 @@ const OperatorRaisedTicket = () => {
                       ? result.Designation
                       : result.designation;
 
+                       const Created_date = new Date(result.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true, 
+                      })
+                      .replace(/\//g, "/") 
+                      .replace(",", ""); 
+
                     return (
                       <tr key={index} className="table-row-hover">
                         <td>{srNo}</td>
@@ -309,7 +321,7 @@ const OperatorRaisedTicket = () => {
                         <td>{userName}</td>
                         <td>{designation}</td>
                         <td>
-                          {new Date(result.Created_date).toLocaleString()}
+                          {Created_date}
                         </td>
                         <td>{result.Category}</td>
                         <td>{result.Sub_Category}</td>
@@ -382,6 +394,18 @@ const OperatorRaisedTicket = () => {
                 ? selectedTicket.Department
                 : selectedTicket.department;
 
+                 const Created_date = new Date(selectedTicket.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true, 
+                      })
+                      .replace(/\//g, "/") 
+                      .replace(",", ""); 
+
               return (
                 <table className="table table-bordered">
                   <tbody>
@@ -428,6 +452,10 @@ const OperatorRaisedTicket = () => {
                     <tr>
                       <th style={{ color: "#4682B4" }}>Sub Category</th>
                       <td>{selectedTicket.Sub_Category}</td>
+                    </tr>
+                    <tr>
+                      <th style={{ color: "#4682B4" }}>Created Date</th>
+                      <td>{Created_date}</td>
                     </tr>
                     <tr>
                       <th style={{ color: "#4682B4" }}>Description</th>

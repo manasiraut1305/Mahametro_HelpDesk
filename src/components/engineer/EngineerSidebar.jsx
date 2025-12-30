@@ -21,7 +21,7 @@ import { AuthContext } from "../AuthContext";
 
 function Sidebar({ setActiveContent }) {
   const {
-    user /* You might have updatePassword or sendPasswordResetEmail here */,
+    user ,
   } = useContext(AuthContext);
   const navigate = useNavigate();
   const [password, setPassword] = useState(""); // This state seems unused in the provided snippet
@@ -89,6 +89,12 @@ function Sidebar({ setActiveContent }) {
               <li>
                 <span>Dashboard</span>
                 <MdDashboard className="nav-icon" />
+              </li>
+            </Link>
+            <Link to="EngineerGenerateTicket" className="nav-item">
+              <li>
+                <span>Generate Ticket</span>
+                <MdToken className="nav-icon me-2" />
               </li>
             </Link>
             <Link to="EngineerAssignedTicket" className="nav-item">

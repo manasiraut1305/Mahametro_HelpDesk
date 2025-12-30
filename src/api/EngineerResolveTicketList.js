@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL
 
 export async function engineerTicketResolveListFunction({ engineerId }) {
   try {
-    const res = await fetch(`${API_URL}/EngineerResolvedBySP/${engineerId}`, {
+    const res = await fetch(`${API_URL}/EngineerResolvedBySP_New/${engineerId}`, {
       
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },

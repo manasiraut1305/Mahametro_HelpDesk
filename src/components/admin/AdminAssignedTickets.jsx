@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { Pagination } from "react-bootstrap";
 
 import $ from "jquery";
-import "datatables.net-dt"; // JS part
+import "datatables.net-dt"; 
 import "datatables.net-dt/css/dataTables.dataTables.min.css";
-// ✅ correct CSS path
+
 
 const AdminAssignedTicket = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -150,11 +150,20 @@ const AdminAssignedTicket = () => {
                       flag === 0 ||
                       flag === "0";
                     const srNo = index + 1;
-                    const Created_date = new Date(
-                      result.Created_date
-                    ).toLocaleString();
+                     const Created_date = new Date(result.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true, 
+                      })
+                      .replace(/\//g, "/") 
+                      .replace(",", ""); 
                     const userName = isNew ? result.UserName : result.name;
-                    const EngineerName = result.EngineerName;
+                    // const EngineerName = result.EngineerName;
+                    const engineerName = result.EngineerNames;
                     const TicketNoRandom = result.TicketNoRandom;
                     const designation = isNew
                       ? result.Designation
@@ -187,11 +196,15 @@ const AdminAssignedTicket = () => {
                             : designation}
                         </td>
                         <td style={{ padding: "14px 12px" }}>
-                          {Array.isArray(Created_date)
-                            ? Created_date.join(", ")
-                            : Created_date}
+                          {Created_date}
                         </td>
-                        <td style={{ padding: "14px 12px" }}>{EngineerName}</td>
+                        {/* <td style={{ padding: "14px 12px" }}>{EngineerName}</td>
+                         */}
+                         <td style={{ padding: "14px 12px" }}>
+                          {engineerName.map((name, index) => (
+                            <p key={index}>{name}</p>
+                          ))}
+                        </td>
                         <td style={{ padding: "14px 12px" }}>
                           <FontAwesomeIcon
                             className="text-orange ms-2"
@@ -207,36 +220,6 @@ const AdminAssignedTicket = () => {
                 </tbody>
               </table>
             </div>
-
-            {/* <div className="d-flex justify-content-center mt-4 paginabox">
-            <Pagination>
-              <Pagination.First
-                onClick={goToFirstPage}
-                disabled={currentPage === 1}
-              />
-              <Pagination.Prev
-                onClick={goToPrevPage}
-                disabled={currentPage === 1}
-              />
-              {[...Array(totalPages)].map((_, idx) => (
-                <Pagination.Item
-                  key={idx + 1}
-                  active={idx + 1 === currentPage}
-                  onClick={() => paginate(idx + 1)}
-                >
-                  {idx + 1}
-                </Pagination.Item>
-              ))}
-              <Pagination.Next
-                onClick={goToNextPage}
-                disabled={currentPage === totalPages}
-              />
-              <Pagination.Last
-                onClick={goToLastPage}
-                disabled={currentPage === totalPages}
-              />
-            </Pagination>
-          </div> */}
           </div>
         </>
       ) : (
@@ -268,7 +251,19 @@ const AdminAssignedTicket = () => {
               const department = isNew
                 ? selectedTicket.Department
                 : selectedTicket.department;
-              const EngineerName = selectedTicket.EngineerName;
+              const engineerName = selectedTicket.EngineerNames;
+
+               const Created_date = new Date(selectedTicket.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true, 
+                      })
+                      .replace(/\//g, "/") 
+                      .replace(",", ""); 
               return (
                 <div className="table-responsive">
                   <table className="table table-bordered">
@@ -308,9 +303,8 @@ const AdminAssignedTicket = () => {
                       <tr>
                         <th>Created Date</th>
                         <td>
-                          {new Date(
-                            selectedTicket.Created_date
-                          ).toLocaleString()}
+                          {Created_date}
+                         
                         </td>
                       </tr>
                       <tr>
@@ -319,7 +313,11 @@ const AdminAssignedTicket = () => {
                       </tr>
                       <tr>
                         <th>Engineer Name</th>
-                        <td>{selectedTicket.EngineerName}</td>
+                      <td style={{ padding: "14px 12px" }}>
+                          {engineerName.map((name, index) => (
+                            <p key={index}>{name}</p>
+                          ))}
+                        </td>
                       </tr>
                       <tr>
                         <th>File</th>

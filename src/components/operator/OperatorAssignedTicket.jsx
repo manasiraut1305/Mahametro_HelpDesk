@@ -15,11 +15,9 @@ import $ from "jquery";
 import "datatables.net-dt";
 import "datatables.net-dt/css/dataTables.dataTables.min.css";
 
-const showLoading = () => {
-};
+const showLoading = () => {};
 
-const hideLoading = () => {
-};
+const hideLoading = () => {};
 
 const OperatorAssignedTicket = () => {
   const { user } = useContext(AuthContext);
@@ -71,7 +69,7 @@ const OperatorAssignedTicket = () => {
 
       if (!data?.result) {
         setErrorMessage("No ticket data found.");
-        setAssignedData([]); 
+        setAssignedData([]);
       } else {
         setAssignedData(data.result);
       }
@@ -212,7 +210,6 @@ const OperatorAssignedTicket = () => {
       EngineerId: Number(selectedEngineerToAssign.Id), // Ensure EngineerId is a number
       priority: selectedPriority,
     };
-    
 
     showLoading();
     try {
@@ -232,7 +229,7 @@ const OperatorAssignedTicket = () => {
       fetchAssignedTickets(); // Refresh ticket data to show updated assignment
     } catch (err) {
       hideLoading();
-     
+
       alert("Assignment error: " + err.message); // Display error to user
     }
   };
@@ -363,10 +360,17 @@ const OperatorAssignedTicket = () => {
                       result.Flag === "0";
 
                     const srNo = index + 1;
-                    // Format date for display
-                    const Created_date = new Date(
-                      result.Created_date
-                    ).toLocaleString();
+                    const Created_date = new Date(result.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .replace(/\//g, "/")
+                      .replace(",", "");
                     const userName = isNew ? result.UserName : result.name;
                     const designation = isNew
                       ? result.Designation
@@ -406,7 +410,7 @@ const OperatorAssignedTicket = () => {
                           {result.Sub_Category}
                         </td>
                         <td style={{ padding: "14px 12px" }}>
-                          {Array.isArray(Created_date) // This array check might not be necessary for single date string
+                          {Array.isArray(Created_date)
                             ? Created_date.join(", ")
                             : Created_date}
                         </td>
@@ -451,7 +455,6 @@ const OperatorAssignedTicket = () => {
         <Modal.Body>
           {selectedTicket ? (
             (() => {
-              // Extract details from selectedTicket, considering 'new' vs 'existing' ticket structure
               const flag = selectedTicket.Flag;
               const isNew =
                 flag === null || flag === "null" || flag === 0 || flag === "0";
@@ -468,6 +471,20 @@ const OperatorAssignedTicket = () => {
               const department = isNew
                 ? selectedTicket.Department
                 : selectedTicket.department;
+
+              const Created_date = new Date(selectedTicket.Created_date)
+                .toLocaleString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })
+                .replace(/\//g, "/")
+                .replace(",", "");
+
+              const engineerName = selectedTicket.EngineerName;
 
               return (
                 <div className="table-responsive">
@@ -515,11 +532,7 @@ const OperatorAssignedTicket = () => {
                       </tr>
                       <tr>
                         <th style={{ color: "#4682B4" }}>Created Date</th>
-                        <td>
-                          {new Date(
-                            selectedTicket.Created_date
-                          ).toLocaleString()}
-                        </td>
+                        <td>{Created_date}</td>
                       </tr>
                       <tr>
                         <th style={{ color: "#4682B4" }}>Description</th>
@@ -527,7 +540,13 @@ const OperatorAssignedTicket = () => {
                       </tr>
                       <tr>
                         <th style={{ color: "#4682B4" }}>Engineer Name</th>
-                        <td>{selectedTicket.EngineerName || "Not Assigned"}</td>
+                        <td style={{ padding: "14px 12px" }}>
+                          {(selectedTicket?.EngineerNames ?? []).map((n, i) => (
+                            <p key={i} className="mb-1">
+                              {n}
+                            </p>
+                          ))}
+                        </td>
                       </tr>
                       <tr>
                         <th style={{ color: "#4682B4" }}>Documents</th>

@@ -5,7 +5,8 @@ import Modal from "react-bootstrap/Modal";
 
 import { uploadFileFunction } from "../../api/UploadFile";
 import { engineerListFunction } from "../../api/EngineerList";
-import { reassignEngineerFunction } from "../../api/ReassignEngineer"; // Assuming this is the corrected function from your previous request
+import { reassignEngineerFunction } from "../../api/ReassignEngineer"; 
+import { updateEngineerFunction } from "../../api/UpdateEngineer"; 
 
 import { changeStatusToApprovedFunction } from "../../api/ChangeStatusToApproved";
 import { engineerTicketListFunction } from "../../api/EngineerAssignTicketList";
@@ -19,7 +20,7 @@ import "datatables.net-dt/css/dataTables.dataTables.min.css";
 
 const EngineerAssignedTicket = () => {
   const { user } = useContext(AuthContext);
-  const engineerId = user?.id; // Renamed from engineerId to currentEngineerId for clarity if needed, but keeping original for consistency with AuthContext
+  const engineerId = user?.id; 
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,10 +31,9 @@ const EngineerAssignedTicket = () => {
   const [engineer, setEngineer] = useState([]);
 
   const [successMessage, setSuccessMessage] = useState("");
-  // const [newEngineerId, setNewEngineerId] = useState([]); // This state was declared but not used for its intended purpose (selected ID)
   const [filteredEngineers, setFilteredEngineers] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // currentPage and related pagination states are commented out in JSX, so they are not currently active
+  const [currentPage, setCurrentPage] = useState(1); 
   const [selectedNewEngineerId, setSelectedNewEngineerId] = useState(null);
 
   const [selectedPhotos, setSelectedPhotos] = useState([]);
@@ -122,7 +122,7 @@ const EngineerAssignedTicket = () => {
       const formData = new FormData();
       formData.append("Token", selectedTicket.Token);
       selectedPhotos.forEach((file) => {
-        formData.append("files", file); // Use 'files' or a similar key that your backend expects
+        formData.append("files", file);
       });
 
       const uploadResponse = await uploadFileFunction(formData);
@@ -143,7 +143,7 @@ const EngineerAssignedTicket = () => {
     }
   };
 
-  // Handle click outside suggestions to close them
+ 
   const suggestionRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -194,6 +194,40 @@ const EngineerAssignedTicket = () => {
       } else {
         alert(response.message);
         getData(); // Refresh ticket list
+        handleClose(); // Close the modal
+      }
+    } catch (err) {
+      hideLoading();
+      setErrorMessage("API error occurred: " + err.message);
+    }
+  };
+  const handleUpdateEngineer = async () => {
+    try {
+      showLoading();
+      const token = selectedTicket?.Token;
+      const currentEngineerId = engineerId;
+      const newEngineerToAssignId = selectedNewEngineerId; 
+
+      // Validate required data
+      if (!token || !currentEngineerId || !newEngineerToAssignId) {
+        hideLoading();
+        setErrorMessage("Missing required data to reassign engineer.");
+        return;
+      }
+
+      const response = await updateEngineerFunction({
+        token: token, 
+        currentEngineerId: currentEngineerId, 
+        newEngineerId: newEngineerToAssignId, 
+      });
+
+      hideLoading();
+
+      if (!response || !response.message) {
+        setErrorMessage("Engineer reassignment failed.");
+      } else {
+        
+        getData(); 
         handleClose(); // Close the modal
       }
     } catch (err) {
@@ -265,12 +299,12 @@ const EngineerAssignedTicket = () => {
     setFilteredEngineers(filtered);
   };
 
-  // Fetch initial ticket data when engineerId is available
+ 
   useEffect(() => {
     if (engineerId) {
       getData();
     }
-  }, [engineerId]); // Dependency on engineerId ensures it runs after user context is loaded
+  }, [engineerId]); 
 
   return (
     <div className="container-fluid mt-0 px-0">
@@ -340,6 +374,19 @@ const EngineerAssignedTicket = () => {
                     ? result.Designation
                     : result.designation;
 
+
+                    const Created_date = new Date(result.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .replace(/\//g, "/")
+                      .replace(",", "");
+
                   return (
                     <tr
                       key={index}
@@ -363,15 +410,12 @@ const EngineerAssignedTicket = () => {
                           : designation}
                       </td>
                       <td style={{ padding: "14px 12px" }}>
-                        {/* Ensure createddate is not an array before calling toLocaleString directly on it */}
-                        {createddate}
+                        {Created_date}
                       </td>
                       <td style={{ padding: "14px 12px" }}>
-                        {/* Ensure createddate is not an array before calling toLocaleString directly on it */}
                         {result.CategoryName}
                       </td>
                       <td style={{ padding: "14px 12px" }}>
-                        {/* Ensure createddate is not an array before calling toLocaleString directly on it */}
                         {result.SubCategoryName}
                       </td>
                    <td style={{ padding: "14px 12px" }}>
@@ -456,6 +500,18 @@ const EngineerAssignedTicket = () => {
                 ? selectedTicket.Mobile_no
                 : selectedTicket.mobile_no;
 
+                const Created_date = new Date(selectedTicket.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .replace(/\//g, "/")
+                      .replace(",", "");
+
               return (
                 <table className="table table-bordered">
                   <tbody>
@@ -520,11 +576,9 @@ const EngineerAssignedTicket = () => {
 
                     {selectedTicket.Created_date && (
                       <tr style={{ borderBottom: "1px solid #ddd" }}>
-                        <th style={{ color: "#4682B4" }}>Generation Date</th>
+                        <th style={{ color: "#4682B4" }}>Created Date</th>
                         <td>
-                          {new Date(
-                            selectedTicket.Created_date
-                          ).toLocaleString()}
+                          {Created_date}
                         </td>
                       </tr>
                     )}
@@ -750,7 +804,7 @@ const EngineerAssignedTicket = () => {
                             </div>
                             <div>
                               <Button
-                                className="btn w-100 mx-2"
+                                className="btn w-100 mx-3"
                                 onClick={handleAssignEngineer}
                                 style={{
                                   background: "#4682B4",
@@ -759,6 +813,19 @@ const EngineerAssignedTicket = () => {
                                 }}
                               >
                                 Forward
+                              </Button>
+                            </div>
+                            <div>
+                              <Button
+                                className="btn w-100 mx-4"
+                                onClick={handleUpdateEngineer}
+                                style={{
+                                  background: "#4682B4",
+                                  color: "white",
+                                  flex: "",
+                                }}
+                              >
+                                Update
                               </Button>
                             </div>
                           </div>

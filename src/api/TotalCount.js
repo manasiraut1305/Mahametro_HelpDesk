@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL
 
 export async function totalCountFunction({FromDate , ToDate, engineer_id ,Category, Sub_Category,Ticket_type}) {
   try {
-    const res = await fetch(`${API_URL}/TotalTicketCount_New`, {
+    const res = await fetch(`${API_URL}/TotalTicketCount_Update`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({FromDate,ToDate,  engineer_id, Category, Sub_Category,Ticket_type}),

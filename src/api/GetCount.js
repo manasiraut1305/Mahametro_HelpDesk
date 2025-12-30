@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL
 
 export async function GetCount(Id) {
   try {
-    const res = await fetch(`${API_URL}/GetStatusCount?Id=${Id}`, {
+    const res = await fetch(`${API_URL}/GetStatusCount_Update?Id=${Id}`, {
       
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },

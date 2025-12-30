@@ -112,7 +112,7 @@ const AdminRaisedTicket = () => {
 
       {!loading && raisedData.length > 0 ? (
         <>
-              <h4 className="ttext-center">Raised Tickets</h4>
+              <h4 className="text-center">Raised Tickets</h4>
           <div className="dashboard-card">
             <div>
             </div>
@@ -167,9 +167,21 @@ const AdminRaisedTicket = () => {
 
                     const userName = isNew ? result.UserName : result.name;
                     const TicketNoRandom = result.TicketNoRandom;
-                    const Created_date = new Date(
-                      result.Created_date
-                    ).toLocaleString();
+                    // const Created_date = new Date(
+                    //   result.Created_date
+                    // ).toLocaleString();
+
+                     const Created_date = new Date(result.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true, 
+                      })
+                      .replace(/\//g, "/") 
+                      .replace(",", ""); 
                     const designation = isNew
                       ? result.Designation
                       : result.designation;
@@ -276,6 +288,19 @@ const AdminRaisedTicket = () => {
                 ? selectedTicket.Department
                 : selectedTicket.department;
 
+
+                 const Created_date = new Date(selectedTicket.Created_date)
+                      .toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true, 
+                      })
+                      .replace(/\//g, "/") 
+                      .replace(",", ""); 
+
               return (
                 <div className="table-responsive">
                   <table className="table table-bordered">
@@ -315,9 +340,7 @@ const AdminRaisedTicket = () => {
                       <tr>
                         <th style={{color: "#4682B4"}}>Created Date</th>
                         <td>
-                          {new Date(
-                            selectedTicket.Created_date
-                          ).toLocaleString()}
+                         {Created_date}
                         </td>
                       </tr>
                       <tr>

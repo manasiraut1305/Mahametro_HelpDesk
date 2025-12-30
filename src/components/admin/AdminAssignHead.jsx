@@ -229,77 +229,71 @@ const AdminAssignHead = () => {
       )}
 
       <table className="table table-bordered table-striped mt-3">
-        <thead
-          className="thead-dark"
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1,
-            backgroundColor: "#343a40",
-            color: "white",
-          }}
-        >
-          <tr>
-            <th>Department</th>
-            <th>Head</th>
-            <th>Edit</th>
-          </tr>
-        </thead>
+  <thead
+    className="thead-dark"
+    style={{
+      position: "sticky",
+      top: 0,
+      zIndex: 1,
+      backgroundColor: "#343a40",
+      color: "white",
+    }}
+  >
+    <tr>
+      <th>Department</th>
+      <th>Head</th>
+      <th>Add Head</th> {/* Add a column for the plus icon */}
+      <th>Remove Head</th> {/* Add a column for the minus icon */}
+    </tr>
+  </thead>
 
-        <tbody>
-          {departmentList.map((dept) => (
-            <tr key={dept.Department}>
-              <td>{dept.Department}</td>
+  <tbody>
+    {departmentList.map((dept) => (
+      <tr key={dept.Department}>
+        {/* Department Name */}
+        <td>{dept.Department}</td>
 
-              <td>
-                {dept.Heads.length > 0
-                  ? dept.Heads.map((h, index) => (
-                      <div key={h.Id || index}>{h.UserName}</div>
-                    ))
-                  : "No Head Assigned"}
-              </td>
+        {/* Heads Column */}
+        <td>
+          {dept.Heads.length > 0
+            ? dept.Heads.map((h, index) => (
+                <div key={h.Id || index}>{h.UserName}</div>
+              ))
+            : "No Head Assigned"}
+        </td>
 
-              <td>
-                <FontAwesomeIcon
-                  className="text-black ms-2"
-                  icon={faCirclePlus}
-                  title="Add / Change Head"
-                  onClick={() =>
-                    handleOpenAddHeadModal(dept.Department, dept.Id)
-                  }
-                  style={{ cursor: "pointer" }}
-                />
+        {/* Add Head Column */}
+        <td>
+          <FontAwesomeIcon
+            className="text-black ms-2"
+            icon={faCirclePlus}
+            title="Add / Change Head"
+            onClick={() => handleOpenAddHeadModal(dept.Department, dept.Id)}
+            style={{ cursor: "pointer" }}
+          />
+        </td>
 
-                {dept.Heads.map((h) => (
-                  <FontAwesomeIcon
-                    key={h.Id}
-                    className="text-danger ms-2"
-                    icon={faCircleMinus}
-                    title="Remove Head"
-                    onClick={() =>
-                      handleOpenRemoveHeadModal(
-                        dept.Department,
-                        h.UserName,
-                        h.Id
-                      )
-                    }
-                    style={{ cursor: "pointer" }}
-                  />
-                ))}
-
-                {dept.Heads.length === 0 && (
-                  <FontAwesomeIcon
-                    className="text-danger ms-2 opacity-50"
-                    icon={faCircleMinus}
-                    title="No Head to Remove"
-                    style={{ cursor: "not-allowed" }}
-                  />
-                )}
-              </td>
-            </tr>
+        {/* Remove Head Column */}
+        <td>
+          {dept.Heads.map((h) => (
+            <div key={h.Id}>
+              <FontAwesomeIcon
+                className="text-danger ms-2"
+                icon={faCircleMinus}
+                title="Remove Head"
+                onClick={() =>
+                  handleOpenRemoveHeadModal(dept.Department, h.UserName, h.Id)
+                }
+                style={{ cursor: "pointer" }}
+              />
+            </div>
           ))}
-        </tbody>
-      </table>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
 
       {/* ADD HEAD MODAL */}
       <Modal show={showAddHeadModal} onHide={handleCloseAddHeadModal}>

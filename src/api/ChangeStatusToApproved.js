@@ -10,7 +10,8 @@ export async function changeStatusToApprovedFunction(Token, EngineerId) {
 
     console.log("Sending payload:", payload); 
 
-    const res = await fetch(`${API_URL}/EngineerApproved`, {
+    // const res = await fetch(`${API_URL}/EngineerApproved`, {
+    const res = await fetch(`${API_URL}/EngineerApproveWithForwardCheck`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

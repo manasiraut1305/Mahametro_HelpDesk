@@ -41,14 +41,12 @@ function ProjectCard({ projectName }) {
   const [issueDetailedTypes, setIssueDetailedTypes] = useState([]);
 
   const [totalCounts, setTotalCounts] = useState({
- 
     TotalResolvedCount: 0,
     TotalPendingCount: 0,
     TotalTicketCount: 0,
   });
 
   const [engineerTotalCounts, setEngineerTotalCounts] = useState({
-   
     TotalResolvedCount: 0,
     TotalPendingCount: 0,
     TotalTicketCount: 0,
@@ -78,10 +76,9 @@ function ProjectCard({ projectName }) {
         [
           "Engineer Name",
           "Designation",
-           "Total Assigned Tickets",
+          "Total Assigned Tickets",
           "Pending Tickets",
           "Resolved Tickets",
-         
         ],
         ...ticketCounts.map((data) => [
           data.UserName,
@@ -89,16 +86,14 @@ function ProjectCard({ projectName }) {
           data.TotalTicketCountEngineer,
           data.AssignedAndApprovedCount,
           data.ResolvedCount,
-          
         ]),
-        
+
         [
           "TOTAL",
           "",
           engineerTotalCounts.TotalTicketCount,
           engineerTotalCounts.TotalPendingCount,
           engineerTotalCounts.TotalResolvedCount,
-          
         ],
       ];
       const engineerwiseSheet = XLSX.utils.aoa_to_sheet(engineerwiseData);
@@ -133,10 +128,25 @@ function ProjectCard({ projectName }) {
           data.TicketNoRandom,
           data.name || data.UserName,
           data.designation || data.Designation,
-          new Date(data.Created_date).toLocaleString(),
+          new Date(data.Created_date).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          }),
           data.ResolvedDate
-            ? new Date(data.ResolvedDate).toLocaleDateString()
+            ? new Date(data.ResolvedDate).toLocaleString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })
             : "",
+
           data.mobile_no || data.Mobile_No,
           data.department || data.Department,
           data.Location,
@@ -188,7 +198,6 @@ function ProjectCard({ projectName }) {
     saveAs(blob, "Ticket_Report.xlsx");
   };
 
- 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -204,9 +213,9 @@ function ProjectCard({ projectName }) {
     };
     fetchCategories();
   }, []);
-useEffect(()=>{
-  console.log("Category List Updated:", categoryList);
-},[categoryList])
+  useEffect(() => {
+    console.log("Category List Updated:", categoryList);
+  }, [categoryList]);
   useEffect(() => {
     const fetchIssueTypes = async () => {
       try {
@@ -356,7 +365,7 @@ useEffect(()=>{
           Sub_Category: formData.Sub_Category || "",
           Ticket_type: formData.Ticket_type || "",
         };
-console.log("Payload for totalCountFunction:", payload);
+        console.log("Payload for totalCountFunction:", payload);
         const data = await totalCountFunction(payload);
 
         const engineers = data?.result?.Engineers || [];
@@ -659,10 +668,9 @@ console.log("Payload for totalCountFunction:", payload);
                     <tr>
                       <th>Engineer Name</th>
                       <th>Designation</th>
-                     <th>Total Assigned Tickets</th>
+                      <th>Total Assigned Tickets</th>
                       <th>Pending Tickets</th>
                       <th>Resolved Tickets</th>
-                      
                     </tr>
                   </thead>
                   <tbody>
@@ -670,7 +678,7 @@ console.log("Payload for totalCountFunction:", payload);
                       <tr key={data.EngineerId || index}>
                         <td>{data.UserName}</td>
                         <td>{data.Designation}</td>
-                        
+
                         <td>{data.TotalTicketCountEngineer}</td>
                         <td>{data.AssignedAndApprovedCount}</td>
                         <td>{data.ResolvedCount}</td>
@@ -850,7 +858,7 @@ console.log("Payload for totalCountFunction:", payload);
                       htmlFor="Ticket_type"
                       className="mb-0 ea-label-primary"
                     >
-                      Category : 
+                      Category :
                     </label>
                     {/* Category and Subcategory */}
                     <select
@@ -936,12 +944,38 @@ console.log("Payload for totalCountFunction:", payload);
                       <tr key={data.TicketNoRandom || index}>
                         <td>{data.TicketNoRandom}</td>
                         <td>{data.name || data.UserName}</td>
-                        <td>{new Date(data.Created_date).toLocaleString()}</td>
                         <td>
-                          {data.ResolvedDate
-                            ? new Date(data.ResolvedDate).toLocaleString()
+                          {data.Created_date
+                            ? new Date(data.Created_date).toLocaleString(
+                                "en-GB",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "2-digit",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                }
+                              )
                             : ""}
                         </td>
+
+                        <td>
+                          {data.ResolvedDate
+                            ? new Date(data.ResolvedDate).toLocaleString(
+                                "en-GB",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "2-digit",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                }
+                              )
+                            : ""}
+                        </td>
+
                         <td>{data.designation || data.Designation}</td>
                         <td>{data.mobile_no || data.Mobile_No}</td>
                         <td>{data.department || data.Department}</td>

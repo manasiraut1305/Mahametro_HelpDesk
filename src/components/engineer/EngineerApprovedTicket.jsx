@@ -11,6 +11,8 @@ import { commentSectionFunction } from "../../api/CommentSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { reassignEngineerFunction } from "../../api/ReassignEngineer";
+
+import { updateEngineerFunction } from "../../api/UpdateEngineer"; 
 import $ from "jquery";
 import "datatables.net-dt";
 import "datatables.net-dt/css/dataTables.dataTables.min.css";
@@ -191,10 +193,10 @@ const EngineerApprovedTicket = () => {
     setSelectedNewEngineerId(null);
   };
 
-  // ✅ Fixed: only one handleAssignEngineer
   const handleAssignEngineer = async () => {
     try {
       showLoading();
+      // const Token = selectedTicket?.Token;
       const Token = selectedTicket?.Token;
       const currentEngineerId = engineerId;
       const newEngineerToAssignId = selectedNewEngineerId;
@@ -206,11 +208,11 @@ const EngineerApprovedTicket = () => {
       }
 
       const response = await reassignEngineerFunction({
-        Token,
+        token: Token,
         currentEngineerId,
         newEngineerId: newEngineerToAssignId,
       });
-
+      console.log("Reassign Engineer Response:", response);
       hideLoading();
 
       if (!response || !response.message) {
@@ -230,6 +232,39 @@ const EngineerApprovedTicket = () => {
     }
   };
 
+   const handleUpdateEngineer = async () => {
+      try {
+        showLoading();
+        const token = selectedTicket?.Token;
+        const currentEngineerId = engineerId;
+        const newEngineerToAssignId = selectedNewEngineerId; 
+  
+        // Validate required data
+        if (!token || !currentEngineerId || !newEngineerToAssignId) {
+          hideLoading();
+          setErrorMessage("Missing required data to reassign engineer.");
+          return;
+        }
+  
+        const response = await updateEngineerFunction({
+          token: token, 
+          currentEngineerId: currentEngineerId, 
+          newEngineerId: newEngineerToAssignId, 
+        });
+  // console.log("Update Engineer Response:", response);
+        hideLoading();
+  
+        if (!response || !response.message) {
+          setErrorMessage("Engineer reassignment failed.");
+        } else {
+          getData(); 
+          handleCloseModal(); 
+        }
+      } catch (err) {
+        hideLoading();
+        setErrorMessage("API error occurred: " + err.message);
+      }
+    };
   const handleNewCommentInputChange = (e) => {
     setNewCommentInput(e.target.value);
   };
@@ -415,6 +450,7 @@ const EngineerApprovedTicket = () => {
                   ).toLocaleString();
                   const userName = result.name || result.UserName;
                   const designation = result.designation || result.Designation;
+                
 
                   return (
                     <tr
@@ -451,8 +487,20 @@ const EngineerApprovedTicket = () => {
                           ? designation.join(", ")
                           : designation}
                       </td>
-                      <td style={{ padding: "14px 12px" }}>
-                        {createddate}
+                      <td>
+                        {result.Created_date
+                          ? new Date(result.Created_date).toLocaleString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )
+                          : "N/A"}
                       </td>
 
                       <td style={{ padding: "14px 12px" }}>
@@ -569,13 +617,24 @@ const EngineerApprovedTicket = () => {
                     <td>{selectedTicket.User_Location}</td>
                   </tr>
                   <tr>
-                    <th style={{ color: "#4682B4" }}>Generation Date</th>
+                    <th style={{ color: "#4682B4" }}>Created Date</th>
                     <td>
-                      {selectedTicket.createddate
-                        ? new Date(selectedTicket.createddate).toLocaleString()
+                      {selectedTicket?.Created_date
+                        ? new Date(selectedTicket.Created_date).toLocaleString(
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            }
+                          )
                         : "N/A"}
                     </td>
                   </tr>
+
                   <tr>
                     <th style={{ color: "#4682B4" }}>Ticket Type</th>
                     <td>{selectedTicket.Ticket_type}</td>
@@ -711,14 +770,14 @@ const EngineerApprovedTicket = () => {
                                     padding: 0,
                                     margin: 0,
                                     listStyle: "none",
-                                    top: "100%", // Position below the input
+                                    top: "100%",
                                     left: 0,
                                   }}
                                 >
                                   {filteredEngineers.map((item, i) => (
                                     <li
                                       key={i}
-                                      onMouseDown={(e) => e.preventDefault()} // Prevent blur when clicking a suggestion
+                                      onMouseDown={(e) => e.preventDefault()}
                                       onClick={() => handleSelectEngineer(item)}
                                       style={{
                                         padding: "8px 12px",
@@ -742,6 +801,19 @@ const EngineerApprovedTicket = () => {
                               }}
                             >
                               Forward
+                            </Button>
+                          </div>
+                          <div>
+                            <Button
+                              className="btn w-100 mx-3"
+                              onClick={handleUpdateEngineer}
+                              style={{
+                                background: "#4682B4",
+                                color: "white",
+                                flex: "",
+                              }}
+                            >
+                              Update
                             </Button>
                           </div>
                         </div>

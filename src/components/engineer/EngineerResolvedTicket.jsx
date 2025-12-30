@@ -29,7 +29,7 @@ const EngineerResolvedTicket = () => {
 
   const [successMessage, setSuccessMessage] = useState("");
   const [selectedPhotos, setSelectedPhotos] = useState([]);
-  const dataTableRef = useRef(null); // Ref for DataTables instance
+  const dataTableRef = useRef(null);
 
   const showLoading = () => setLoading(true);
   const hideLoading = () => setLoading(false);
@@ -199,7 +199,6 @@ const EngineerResolvedTicket = () => {
     return () => clearInterval(interval);
   }, [engineerId]);
 
-  // Initial data load when engineerId is available
   useEffect(() => {
     if (engineerId) {
       getData();
@@ -307,13 +306,37 @@ const EngineerResolvedTicket = () => {
                   const createddate = new Date(
                     result.createddate
                   ).toLocaleString();
-                  const ResolvedDate = result.ResolvedDate
-                    ? new Date(result.ResolvedDate).toLocaleDateString()
-                    : "";
+                  // const ResolvedDate = result.ResolvedDate
+                  //   ? new Date(result.ResolvedDate).toLocaleDateString()
+                  //   : "";
                   const userName = isNew ? result.UserName : result.name;
                   const designation = isNew
                     ? result.Designation
                     : result.designation;
+
+                  const Created_Date = new Date(result.createddate)
+                    .toLocaleString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
+                    .replace(/\//g, "/")
+                    .replace(",", "");
+
+                  const ResolvedDate = new Date(result.ResolvedDate)
+                    .toLocaleString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
+                    .replace(/\//g, "/")
+                    .replace(",", "");
 
                   return (
                     <tr
@@ -343,17 +366,9 @@ const EngineerResolvedTicket = () => {
                       <td style={{ padding: "14px 12px" }}>
                         {result.Sub_Category}
                       </td>
-                      <td style={{ padding: "14px 12px" }}>
-                        {result.createddate
-                          ? new Date(result.createddate).toLocaleString()
-                          : "—"}
-                      </td>
+                      <td style={{ padding: "14px 12px" }}>{Created_Date}</td>
 
-                      <td style={{ padding: "14px 12px" }}>
-                        {result.ResolvedDate
-                          ? new Date(result.ResolvedDate).toLocaleString()
-                          : "—"}
-                      </td>
+                      <td style={{ padding: "14px 12px" }}>{ResolvedDate}</td>
 
                       <td style={{ padding: "14px 12px" }}>
                         <FontAwesomeIcon
@@ -440,10 +455,20 @@ const EngineerResolvedTicket = () => {
                   </tr>
 
                   <tr>
-                    <th style={{ color: "#4682B4" }}>Generation Date</th>
+                    <th style={{ color: "#4682B4" }}>Created Date</th>
                     <td>
-                      {selectedTicket.Created_date
-                        ? new Date(selectedTicket.Created_date).toLocaleString()
+                      {selectedTicket?.createddate
+                        ? new Date(selectedTicket.createddate).toLocaleString(
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            }
+                          )
                         : "N/A"}
                     </td>
                   </tr>
@@ -451,8 +476,18 @@ const EngineerResolvedTicket = () => {
                   <tr>
                     <th style={{ color: "#4682B4" }}>Resolved Date</th>
                     <td>
-                      {selectedTicket.ResolvedDate
-                        ? new Date(selectedTicket.ResolvedDate).toLocaleString()
+                     {selectedTicket?.ResolvedDate
+                        ? new Date(selectedTicket.ResolvedDate).toLocaleString(
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            }
+                          )
                         : "N/A"}
                     </td>
                   </tr>

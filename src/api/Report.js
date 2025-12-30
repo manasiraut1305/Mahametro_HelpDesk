@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL
 
 export async function TicketReport({FromDate , ToDate, engineer_id, status,Category, Sub_Category,Ticket_type}) {
   try {
-    const res = await fetch(`${API_URL}/TicketReportWithAssignmentHistory_New`, {
+    const res = await fetch(`${API_URL}/TicketReportWithAssignmentHistory_Update`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({FromDate,ToDate, engineer_id, status,Category, Sub_Category,Ticket_type}),

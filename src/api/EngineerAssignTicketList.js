@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL
 
 export async function engineerTicketListFunction({ id }) {
   try {
-    const res = await fetch(`${API_URL}/EngineerAssignedTicketsAll_New?engineerId=${id}`, {
+    const res = await fetch(`${API_URL}/EngineerAssignedTicketsAll_Updated?engineerId=${id}`, {
       
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
