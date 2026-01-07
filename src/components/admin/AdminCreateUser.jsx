@@ -222,6 +222,7 @@ const AdminCreateUser = ({ setModalVisible }) => {
             >
               <option value="">Select location</option>
               <option value="Nagpur">Nagpur</option>
+              <option value="NaviMumbai">Navi Mumbai</option>
               <option value="Pune">Pune</option>
               <option value="Thane">Thane</option>
             </select>

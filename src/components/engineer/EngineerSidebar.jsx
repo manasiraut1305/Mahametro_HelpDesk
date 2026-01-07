@@ -91,9 +91,15 @@ function Sidebar({ setActiveContent }) {
                 <MdDashboard className="nav-icon" />
               </li>
             </Link>
-            <Link to="EngineerGenerateTicket" className="nav-item">
+            {/* <Link to="EngineerGenerateTicket" className="nav-item">
               <li>
                 <span>Generate Ticket</span>
+                <MdToken className="nav-icon me-2" />
+              </li>
+            </Link> */}
+            <Link to="EngineerAddTicket" className="nav-item">
+              <li>
+                <span>Add Ticket</span>
                 <MdToken className="nav-icon me-2" />
               </li>
             </Link>
