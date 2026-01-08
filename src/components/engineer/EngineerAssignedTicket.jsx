@@ -90,21 +90,46 @@ const EngineerAssignedTicket = () => {
   };
 
   // Fetch engineers list on component mount
+  // useEffect(() => {
+  //   const fetchEngineers = async () => {
+  //     try {
+  //       showLoading();
+  //       const data = await engineerListFunction();
+  //       hideLoading();
+  //       setEngineer(data || []);
+  //       setFilteredEngineers(data || []); // Initialize filtered engineers with all engineers
+  //     } catch (err) {
+  //       hideLoading();
+  //       setErrorMessage("Engineer API error: " + err.message);
+  //     }
+  //   };
+  //   fetchEngineers();
+  // }, []);
+
+
   useEffect(() => {
-    const fetchEngineers = async () => {
-      try {
-        showLoading();
-        const data = await engineerListFunction();
-        hideLoading();
-        setEngineer(data || []);
-        setFilteredEngineers(data || []); // Initialize filtered engineers with all engineers
-      } catch (err) {
-        hideLoading();
-        setErrorMessage("Engineer API error: " + err.message);
-      }
-    };
-    fetchEngineers();
-  }, []);
+  const fetchEngineers = async () => {
+    try {
+      showLoading();
+      const data = await engineerListFunction();
+      hideLoading();
+
+      const all = Array.isArray(data) ? data : [];
+
+      // ✅ remove logged-in engineer from the list
+      const withoutSelf = all.filter((eng) => String(eng.Id) !== String(engineerId));
+
+      setEngineer(withoutSelf);
+      setFilteredEngineers(withoutSelf);
+    } catch (err) {
+      hideLoading();
+      setErrorMessage("Engineer API error: " + err.message);
+    }
+  };
+
+  if (engineerId) fetchEngineers();
+}, [engineerId]);
+
 
   const handleUploadPhoto = async () => {
     if (!selectedTicket?.Token) {
@@ -286,18 +311,33 @@ const EngineerAssignedTicket = () => {
     setShowSuggestions(false);
   };
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchText(value);
-    setShowSuggestions(true);
+  // const handleSearchChange = (e) => {
+  //   const value = e.target.value;
+  //   setSearchText(value);
+  //   setShowSuggestions(true);
 
-    const filtered = engineer.filter((eng) =>
-      `${eng.Designation} ${eng.UserName}`
-        .toLowerCase()
-        .includes(value.toLowerCase())
+  //   const filtered = engineer.filter((eng) =>
+  //     `${eng.Designation} ${eng.UserName}`
+  //       .toLowerCase()
+  //       .includes(value.toLowerCase())
+  //   );
+  //   setFilteredEngineers(filtered);
+  // };
+
+
+  const handleSearchChange = (e) => {
+  const value = e.target.value;
+  setSearchText(value);
+  setShowSuggestions(true);
+
+  const filtered = engineer
+    .filter((eng) => String(eng.Id) !== String(engineerId)) // ✅ extra safety
+    .filter((eng) =>
+      `${eng.Designation} ${eng.UserName}`.toLowerCase().includes(value.toLowerCase())
     );
-    setFilteredEngineers(filtered);
-  };
+
+  setFilteredEngineers(filtered);
+};
 
  
   useEffect(() => {
