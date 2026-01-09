@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AuthContext } from "../AuthContext";
 import { operatorAddTicketFunction } from "../../api/OperatorAddTicket";
-import { allUserListFunction } from "../../api/AllUsers";
+import { activeUserListFunction } from "../../api/ActiveUsersList";
 import { categoriesListFunction } from "../../api/categoriesList";
 import { issuesListFunction } from "../../api/issuetypeList";
 import { allDepartmentListFunction } from "../../api/AdminDepartmentList";
@@ -64,10 +64,10 @@ const EngineerAddTicket = ({ setModalVisible, getAllData }) => {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const data = await allUserListFunction();
-        if (Array.isArray(data)) {
-          setUsers(data);
-          setFilteredUsers(data);
+        const data = await activeUserListFunction();
+        if (Array.isArray(data.result)) {
+          setUsers(data.result);
+          setFilteredUsers(data.result);
         } else {
           setUsers([]);
           setFilteredUsers([]);
