@@ -45,6 +45,7 @@ import UserRejectedTicket from "./components/user/UserRejectedTicket";
 import OperatorRejectedTickets from "./components/operator/OperatorRejectedTickets";
 import EngineerGenerateTicket from "./components/engineer/EngineerGenerateTicket";
 import EngineerAddTicket from "./components/engineer/EngineerAddTicket";
+import WorkloadReport from "./components/operator/OperatorWorkloadReport";
 
 function App() {
  
@@ -148,6 +149,10 @@ function App() {
           <Route
             path="OperatorRejectedTicket"
             element={<OperatorRejectedTickets />}
+          />
+          <Route
+            path="OperatorWorkloadReport"
+            element={<WorkloadReport />}
           />
           <Route path="ProjectCard" element={<ProjectCard />} />
         </Route>

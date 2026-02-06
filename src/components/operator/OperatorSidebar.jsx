@@ -93,6 +93,8 @@ function Sidebar() {
               </li>
             </Link>
 
+            <hr />
+
             <Link to="OperatorRaisedTicket" className="nav-item">
               <li>
                 <span>Raised Tickets</span>
@@ -126,13 +128,20 @@ function Sidebar() {
                 <MdToken className="nav-icon me-2" />
               </li>
             </Link>
-
+<hr />
             <Link to="ProjectCard" className="nav-item">
               <li>
                 <span>Report</span>
                 <MdToken className="nav-icon me-2" />
               </li>
             </Link>
+            <Link to="OperatorWorkloadReport" className="nav-item">
+              <li>
+                <span>Workload Report</span>
+                <MdToken className="nav-icon me-2" />
+              </li>
+            </Link>
+            <hr />
 
             <li
               className="nav-item"

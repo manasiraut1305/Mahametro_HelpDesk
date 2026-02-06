@@ -62,7 +62,7 @@ const EngineerResolvedTicket = () => {
   };
 
   const handleUploadPhoto = async () => {
-    if (!selectedTicket?.Token) {
+    if (!selectedTicket?.token) {
       setErrorMessage("Ticket information is missing.");
       return;
     }
@@ -75,7 +75,7 @@ const EngineerResolvedTicket = () => {
     showLoading();
     try {
       const formData = new FormData();
-      formData.append("Token", selectedTicket.Token);
+      formData.append("Token", selectedTicket.token);
       selectedPhotos.forEach((file) => {
         formData.append("files", file); // Use 'files' or a similar key that your backend expects
       });
@@ -115,14 +115,15 @@ const EngineerResolvedTicket = () => {
   };
 
   // Fetch comments for a specific ticket Token
-  const fetchComments = async (Token) => {
-    if (!Token) {
+  const fetchComments = async (token) => {
+    if (!token) {
       setComments([]);
       return;
     }
     try {
       setLoading(true); // Indicate loading for comments
-      const response = await getCommentFunction({ Token: Token });
+      const response = await getCommentFunction({ Token: token });
+      console.log(token);
       if (response?.result && Array.isArray(response.result)) {
         const formattedComments = response.result.map((item) => ({
           comment: item.Comments,
@@ -155,7 +156,7 @@ const EngineerResolvedTicket = () => {
 
   // Handle new comment submission
   const handleCommentSubmit = async () => {
-    if (!selectedTicket?.Token || !engineerId) {
+    if (!selectedTicket?.token || !engineerId) {
       setErrorMessage("Ticket information or engineer ID is missing.");
       return;
     }
@@ -169,7 +170,7 @@ const EngineerResolvedTicket = () => {
       const commentResponse = await commentSectionFunction({
         Userid: engineerId,
         Name: name, // Use the engineer's name
-        Token: [selectedTicket.Token],
+        Token: [selectedTicket.token],
         Comment: newCommentInput,
       });
 
@@ -182,7 +183,7 @@ const EngineerResolvedTicket = () => {
 
       alert("Comment submitted successfully.");
       setNewCommentInput(""); // Clear the textarea after submission
-      fetchComments(selectedTicket.Token); // Re-fetch comments to update the displayed list
+      fetchComments(selectedTicket.token); // Re-fetch comments to update the displayed list
     } catch (err) {
       setErrorMessage("Failed to submit comment: " + err.message);
     } finally {
@@ -237,7 +238,7 @@ const EngineerResolvedTicket = () => {
   // When a ticket is selected for viewing details (modal opens), fetch its comments
   useEffect(() => {
     if (selectedTicket && showModal) {
-      fetchComments(selectedTicket.Token);
+      fetchComments(selectedTicket.token);
       setNewCommentInput(""); // Clear the new comment input when modal opens
     }
   }, [selectedTicket, showModal]);
@@ -637,26 +638,28 @@ const EngineerResolvedTicket = () => {
                 </tbody>
               </table>
 
-              {/* Engineer's Comments Section (Historical) */}
+              
               <h5 className="mt-4">Previous Comments</h5>
-              {selectedTicket.Comments && selectedTicket.Comments.length > 0 ? (
+              
+               {comments.length > 0 ? (
+
                 <ul className="list-group mb-3">
-                  {selectedTicket.Comments.map((item, index) => (
+                  {comments.map((item, index) => (
                     <li key={index} className="list-group-item">
                       <div>
-                        <strong>Comment:</strong> {item.Comments}
+                        <strong>Comment:</strong> {item.comment}
                       </div>
                       <div
                         className="text-muted"
                         style={{ fontSize: "0.85rem" }}
                       >
-                        {new Date(item.createddate).toLocaleString()}
+                        {item.timestamp}
                       </div>
                       <div
                         className="text-muted"
                         style={{ fontSize: "0.85rem" }}
                       >
-                        {item.Name}
+                        {item.name}
                       </div>
                     </li>
                   ))}
