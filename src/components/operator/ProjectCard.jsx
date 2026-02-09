@@ -77,23 +77,23 @@ function ProjectCard({ projectName }) {
           "Engineer Name",
           "Designation",
           "Total Assigned Tickets",
-          "Pending Tickets",
           "Resolved Tickets",
+          "Pending Tickets",
         ],
         ...ticketCounts.map((data) => [
           data.UserName,
           data.Designation,
           data.TotalTicketCountEngineer,
-          data.AssignedAndApprovedCount,
           data.ResolvedCount,
+          data.AssignedAndApprovedCount,
         ]),
 
         [
           "TOTAL",
           "",
           engineerTotalCounts.TotalTicketCount,
-          engineerTotalCounts.TotalPendingCount,
           engineerTotalCounts.TotalResolvedCount,
+          engineerTotalCounts.TotalPendingCount,
         ],
       ];
       const engineerwiseSheet = XLSX.utils.aoa_to_sheet(engineerwiseData);
@@ -173,7 +173,7 @@ function ProjectCard({ projectName }) {
           "",
           "",
           "",
-          ` Total : ${totalCounts.TotalTicketCount} ,Pending: ${totalCounts.TotalPendingCount}, Resolved: ${totalCounts.TotalResolvedCount}
+          ` Total : ${totalCounts.TotalTicketCount} , Resolved: ${totalCounts.TotalResolvedCount}, Pending: ${totalCounts.TotalPendingCount}
          `,
           "",
         ],
@@ -347,8 +347,8 @@ function ProjectCard({ projectName }) {
         setEngineerTotalCounts({
           TotalAsignedCount: 0,
           TotalApprovedCount: 0,
-          TotalResolvedCount: 0,
           TotalPendingCount: 0,
+          TotalResolvedCount: 0,
         });
         return;
       }
@@ -378,16 +378,16 @@ function ProjectCard({ projectName }) {
           setEngineerTotalCounts({
             TotalAsignedCount: data.TotalAsignedCount || 0,
             TotalApprovedCount: data.TotalApprovedCount || 0,
-            TotalPendingCount: data.TotalPendingCount || 0,
             TotalResolvedCount: data.TotalResolvedCount || 0,
+            TotalPendingCount: data.TotalPendingCount || 0,
             TotalTicketCount: data.TotalTicketCount || 0,
           });
         } else {
           setTicketCounts([]);
           setEngineerTotalCounts({
             TotalAsignedCount: 0,
-            TotalApprovedCount: 0,
             TotalPendingCount: 0,
+            TotalApprovedCount: 0,
             TotalResolvedCount: 0,
             TotalTicketCount: 0,
           });
@@ -476,6 +476,7 @@ function ProjectCard({ projectName }) {
 
   return (
     <>
+    <div style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "10px", textAlign: "center" }}>Report</div>
       <div className="d-flex justify-content-left mb-4">
         <div className="btn m-10">
           <button
@@ -669,8 +670,8 @@ function ProjectCard({ projectName }) {
                       <th>Engineer Name</th>
                       <th>Designation</th>
                       <th>Total Assigned Tickets</th>
-                      <th>Pending Tickets</th>
                       <th>Resolved Tickets</th>
+                      <th>Pending Tickets</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -680,8 +681,8 @@ function ProjectCard({ projectName }) {
                         <td>{data.Designation}</td>
 
                         <td>{data.TotalTicketCountEngineer}</td>
-                        <td>{data.AssignedAndApprovedCount}</td>
                         <td>{data.ResolvedCount}</td>
+                        <td>{data.AssignedAndApprovedCount}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -692,15 +693,15 @@ function ProjectCard({ projectName }) {
                   <thead>
                     <tr>
                       <th>Total Assigned Tickets</th>
-                      <th>Total Pending Tickets</th>
                       <th>Total Resolved Tickets</th>
+                      <th>Total Pending Tickets</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>{engineerTotalCounts.TotalTicketCount}</td>
-                      <td>{engineerTotalCounts.TotalPendingCount}</td>
                       <td>{engineerTotalCounts.TotalResolvedCount}</td>
+                      <td>{engineerTotalCounts.TotalPendingCount}</td>
                     </tr>
                   </tbody>
                 </table>

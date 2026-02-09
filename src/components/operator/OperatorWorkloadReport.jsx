@@ -476,8 +476,11 @@ function WorkloadReport({ projectName }) {
 
   return (
     <>
+     <div style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "10px", textAlign: "center" }}>Workload Report</div>
       <div className="d-flex justify-content-left mb-4">
+        
         <div className="btn m-10">
+         
           <button
             className="btn"
             style={{
@@ -670,7 +673,7 @@ function WorkloadReport({ projectName }) {
                       <th>Designation</th>
                       <th>Total Assigned Tickets</th>
                       <th>Resolved Tickets</th>
-                      <th>Pending Tickets</th>
+                      <th>Pending Tickets (Overall)</th>
                     </tr>
                   </thead>
                   <tbody>
